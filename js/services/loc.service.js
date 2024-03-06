@@ -65,6 +65,7 @@ function getById(locId) {
 }
 
 function remove(locId) {
+    if(!confirm('Do you whant to DELETE this location?')) return Promise.reject('loc not deleted')
     return storageService.remove(DB_KEY, locId)
 }
 

@@ -173,6 +173,7 @@ function displayLoc(loc) {
 
     mapService.panTo(loc.geo)
     mapService.setMarker(loc)
+    console.log('loc:', loc)
 
     const el = document.querySelector('.selected-loc')
     el.querySelector('.loc-name').innerText = loc.name
