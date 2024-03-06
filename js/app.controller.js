@@ -17,8 +17,10 @@ window.app = {
     onSetSortBy,
     onSetFilterBy,
 }
+let gUserPos
 
 function onInit() {
+    setUserLocation()
     loadAndRenderLocs()
 
     mapService.initMap()
@@ -96,15 +98,24 @@ function onSearchAddress(ev) {
         })
 }
 
+function setUserLocation(){
+    mapService.getUserPosition()
+            .then((latLngUser) => {
+                gUserPos = latLngUser
+                console.log('gUserPos:', gUserPos)
+            })
+
+}
+
 function onAddLoc(geo) {
     
     const locName = prompt('Loc name', geo.address || 'Just a place')
     if (!locName) return
-
+console.log('geo:', geo)
     const loc = {
         name: locName,
         rate: +prompt(`Rate (1-5)`, '3'),
-        distance:0,
+        distance: utilService.getDistance({lat: 32.0004465, lng: 34.8706095}, gUserPos, 'k'),
         geo
     }
     locService.save(loc)
@@ -228,6 +239,7 @@ function flashMsg(msg) {
 function getLocIdFromQueryParams() {
     const queryParams = new URLSearchParams(window.location.search)
     const locId = queryParams.get('locId')
+    console.log('locId:', locId)
     return locId
 }
 

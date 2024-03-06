@@ -11,7 +11,7 @@ export const mapService = {
 }
 
 // TODO: Enter your API Key
-const API_KEY = ''
+const API_KEY = key.apiKey
 var gMap
 var gMarker
 
@@ -64,6 +64,7 @@ function lookupAddressGeo(geoOrAddress) {
 function addClickListener(cb) {
     gMap.addListener('click', (mapsMouseEvent) => {
         const geo = { lat: mapsMouseEvent.latLng.lat(), lng: mapsMouseEvent.latLng.lng() }
+        console.log('geo:', geo)
         lookupAddressGeo(geo).then(cb)
     })
 }
