@@ -1,4 +1,6 @@
 
+import {key} from './apiKey.service.js'
+
 export const mapService = {
     initMap,
     getUserPosition,
