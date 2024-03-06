@@ -1,5 +1,6 @@
 import { utilService } from './util.service.js'
 import { storageService } from './async-storage.service.js'
+import { mapService } from './map.service.js'
 
 // const sampleLoc = {
 //     id: 'GEouN',
@@ -30,7 +31,7 @@ export const locService = {
     save,
     setFilterBy,
     setSortBy,
-    getLocCountByRateMap
+    getLocCountByRateMap,
 }
 
 function query() {
@@ -102,6 +103,7 @@ function setSortBy(sortBy = {}) {
     gSortBy = sortBy
 }
 
+
 function _createLocs() {
     const locs = utilService.loadFromStorage(DB_KEY)
     if (!locs || !locs.length) {
@@ -110,42 +112,50 @@ function _createLocs() {
 }
 
 function _createDemoLocs() {
-    var locs =
-        [
-            {
-                name: "Ben Gurion Airport",
-                rate: 2,
-                geo: {
-                    address: "Ben Gurion Airport, 7015001, Israel",
-                    lat: 32.0004465,
-                    lng: 34.8706095,
-                    zoom: 12
-                },
-            },
-            {
-                name: "Dekel Beach",
-                rate: 4,
-                geo: {
-                    address: "Derekh Mitsrayim 1, Eilat, 88000, Israel",
-                    lat: 29.5393848,
-                    lng: 34.9457792,
-                    zoom: 15
-                },
-            },
-            {
-                name: "Dahab, Egypt",
-                rate: 5,
-                geo: {
-                    address: "Dahab, South Sinai, Egypt",
-                    lat: 28.5096676,
-                    lng: 34.5165187,
-                    zoom: 11
-                }
-            }
-        ]
+    mapService.getUserPosition()
+        .then((latLngUser) => {
+            console.log('latLngUser:', latLngUser)
+            var locs =
+                [
+                    {
+                        name: "Ben Gurion Airport",
+                        rate: 2,
+                        distance: utilService.getDistance({ lat: 32.0004465, lng: 34.8706095 }, latLngUser, 'k'),
+                        geo: {
+                            address: "Ben Gurion Airport, 7015001, Israel",
+                            lat: 32.0004465,
+                            lng: 34.8706095,
+                            zoom: 12
+                        },
+                    },
+                    {
+                        name: "Dekel Beach",
+                        rate: 4,
+                        distance: utilService.getDistance({ lat: 29.5393848, lng: 34.9457792 }, latLngUser, 'k'),
+                        geo: {
+                            address: "Derekh Mitsrayim 1, Eilat, 88000, Israel",
+                            lat: 29.5393848,
+                            lng: 34.9457792,
+                            zoom: 15
+                        },
+                    },
+                    {
+                        name: "Dahab, Egypt",
+                        rate: 5,
+                        distance: utilService.getDistance({ lat: 28.5096676, lng: 34.5165187, }, latLngUser, 'k'),
+                        geo: {
+                            address: "Dahab, South Sinai, Egypt",
+                            lat: 28.5096676,
+                            lng: 34.5165187,
+                            zoom: 11
+                        }
+                    }
+                ]
+            locs = locs.map(_createLoc)
+            utilService.saveToStorage(DB_KEY, locs)
+        }
 
-    locs = locs.map(_createLoc)
-    utilService.saveToStorage(DB_KEY, locs)
+        )
 }
 
 function _createLoc(loc) {
