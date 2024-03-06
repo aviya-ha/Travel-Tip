@@ -196,6 +196,8 @@ function displayLoc(loc) {
     el.querySelector('.loc-address').innerText = loc.geo.address
     el.querySelector('.loc-rate').innerHTML = '★'.repeat(loc.rate)
     el.querySelector('[name=loc-copier]').value = window.location
+    el.querySelector('.loc-distance').innerText = loc.distance
+    el.querySelector('.loc-unit').innerText = 'KM'
     el.classList.add('show')
 
     utilService.updateQueryParams({ locId: loc.id })
