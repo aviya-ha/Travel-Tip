@@ -33,6 +33,7 @@ function onInit() {
 }
 
 function renderLocs(locs) {
+    console.log('locs:', locs)
     const selectedLocId = getLocIdFromQueryParams()
 
     var strHTML = locs.map(loc => {
@@ -41,6 +42,7 @@ function renderLocs(locs) {
         <li class="loc ${className}" data-id="${loc.id}">
             <h4>  
                 <span>${loc.name}</span>
+                <span>Distance: ${loc.distance} KM.</span>
                 <span title="${loc.rate} stars">${'★'.repeat(loc.rate)}</span>
             </h4>
             <p class="muted">
@@ -95,12 +97,14 @@ function onSearchAddress(ev) {
 }
 
 function onAddLoc(geo) {
+    
     const locName = prompt('Loc name', geo.address || 'Just a place')
     if (!locName) return
 
     const loc = {
         name: locName,
         rate: +prompt(`Rate (1-5)`, '3'),
+        distance:0,
         geo
     }
     locService.save(loc)
@@ -125,6 +129,7 @@ function loadAndRenderLocs() {
 }
 
 function onPanToUserPos() {
+    console.log('mapService.getUserPosition():', mapService.getUserPosition())
     mapService.getUserPosition()
         .then(latLng => {
             mapService.panTo({ ...latLng, zoom: 15 })
