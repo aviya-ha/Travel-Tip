@@ -35,7 +35,6 @@ function onInit() {
 }
 
 function renderLocs(locs) {
-    console.log('locs:', locs)
     const selectedLocId = getLocIdFromQueryParams()
 
     var strHTML = locs.map(loc => {
@@ -64,6 +63,7 @@ function renderLocs(locs) {
     elLocList.innerHTML = strHTML || 'No locs to show'
 
     renderLocStats()
+    renderLocStatsData()
 
     if (selectedLocId) {
         const selectedLoc = locs.find(loc => loc.id === selectedLocId)
@@ -102,7 +102,6 @@ function setUserLocation(){
     mapService.getUserPosition()
             .then((latLngUser) => {
                 gUserPos = latLngUser
-                console.log('gUserPos:', gUserPos)
             })
 
 }
@@ -111,7 +110,6 @@ function onAddLoc(geo) {
     
     const locName = prompt('Loc name', geo.address || 'Just a place')
     if (!locName) return
-console.log('geo:', geo)
     const loc = {
         name: locName,
         rate: +prompt(`Rate (1-5)`, '3'),
@@ -189,7 +187,6 @@ function displayLoc(loc) {
 
     mapService.panTo(loc.geo)
     mapService.setMarker(loc)
-    console.log('loc:', loc)
 
     const el = document.querySelector('.selected-loc')
     el.querySelector('.loc-name').innerText = loc.name
@@ -241,7 +238,6 @@ function flashMsg(msg) {
 function getLocIdFromQueryParams() {
     const queryParams = new URLSearchParams(window.location.search)
     const locId = queryParams.get('locId')
-    console.log('locId:', locId)
     return locId
 }
 
@@ -254,7 +250,6 @@ function onSetSortBy() {
     const sortBy = {}
     sortBy[prop] = (isDesc) ? -1 : 1
 
-    console.log('sortBy:', sortBy)
     // Shorter Syntax:
     // const sortBy = {
     //     [prop] : (isDesc)? -1 : 1
@@ -273,6 +268,11 @@ function onSetFilterBy({ txt, minRate }) {
 function renderLocStats() {
     locService.getLocCountByRateMap().then(stats => {
         handleStats(stats, 'loc-stats-rate')
+    })
+}
+function renderLocStatsData() {
+    locService.getLocCountByDateMap().then(stats => {
+        handleStats(stats, 'loc-stats-data')
     })
 }
 
