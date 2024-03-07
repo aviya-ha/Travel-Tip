@@ -7,6 +7,12 @@
 .loc-list {
     list-style: none;
     padding: 0;
+    color: black;
+}
+
+.Locations{
+    font-size: 1.7em;
+    color: var(--bg1);
 }
 
 .loc-list li {
@@ -81,4 +87,11 @@
     width: 1em;
     height: 1em;
     margin-inline-end: 0.3em;
+}
+
+.main-header{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-left: 50px;
+    padding-top: 10px;
+    font-size: 3em;
 }
